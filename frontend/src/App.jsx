@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { io } from "socket.io-client";
 import "./App.css";
 
-const socket = io("http://localhost:5000");
+const socket = io("https://studytogether-5faaum8d.b4a.run");
 
 function App() {
   const [name, setName] = useState("");
@@ -16,12 +16,8 @@ function App() {
   const [students, setStudents] = useState([]);
   const [liveStudents, setLiveStudents] = useState(0);
 
-  // ROOM TIMER DATA
   const [roomTimer, setRoomTimer] = useState(null);
 
-  // =========================
-  // STUDY TIMER
-  // =========================
   useEffect(() => {
     if (!joined || !isRunning) return;
 
@@ -32,9 +28,6 @@ function App() {
     return () => clearInterval(timer);
   }, [joined, isRunning]);
 
-  // =========================
-  // REAL STUDENTS LIST
-  // =========================
   useEffect(() => {
     const handleRoomUsers = (users) => {
       setStudents(users);
@@ -47,9 +40,6 @@ function App() {
     };
   }, []);
 
-  // =========================
-  // QUICK MATCH RESULT
-  // =========================
   useEffect(() => {
     const handleQuickMatch = (data) => {
       setRoom(data.room);
@@ -66,9 +56,6 @@ function App() {
     };
   }, []);
 
-  // =========================
-  // LIVE STUDENTS COUNTER
-  // =========================
   useEffect(() => {
     const handleLiveStudents = (count) => {
       setLiveStudents(count);
@@ -81,9 +68,6 @@ function App() {
     };
   }, []);
 
-  // =========================
-  // ROOM TIMER
-  // =========================
   useEffect(() => {
     const handleRoomTimer = (timer) => {
       setRoomTimer(timer);
@@ -96,9 +80,6 @@ function App() {
     };
   }, []);
 
-  // =========================
-  // JOIN NORMAL ROOM
-  // =========================
   const joinRoom = () => {
     if (!name.trim() || !room.trim()) {
       alert("Please enter your name and room name");
@@ -122,9 +103,6 @@ function App() {
     setIsRunning(true);
   };
 
-  // =========================
-  // QUICK MATCH
-  // =========================
   const startQuickMatch = () => {
     if (!name.trim()) {
       alert("Please enter your name first");
@@ -138,9 +116,6 @@ function App() {
     setQuickMatch(true);
   };
 
-  // =========================
-  // TIMER CONTROLS
-  // =========================
   const startTimer = () => {
     setIsRunning(true);
 
@@ -166,9 +141,6 @@ function App() {
     });
   };
 
-  // =========================
-  // LEAVE ROOM
-  // =========================
   const leaveRoom = () => {
     socket.emit("leave-room");
 
@@ -181,9 +153,6 @@ function App() {
     setRoomTimer(null);
   };
 
-  // =========================
-  // FORMAT TIMER
-  // =========================
   const formatTime = () => {
     const hours = Math.floor(seconds / 3600);
     const minutes = Math.floor((seconds % 3600) / 60);
@@ -198,9 +167,6 @@ function App() {
     );
   };
 
-  // =========================
-  // QUICK MATCH WAITING
-  // =========================
   if (quickMatch && !joined) {
     return (
       <div className="app">
@@ -230,9 +196,6 @@ function App() {
     );
   }
 
-  // =========================
-  // DASHBOARD
-  // =========================
   if (joined) {
     return (
       <div className="app">
@@ -249,7 +212,6 @@ function App() {
             </p>
           )}
 
-          {/* LIVE GLOBAL COUNTER */}
           <div className="timer-card">
             <p>🌍 Students Studying Globally</p>
 
@@ -262,7 +224,6 @@ function App() {
             </p>
           </div>
 
-          {/* YOUR TIMER */}
           <div className="timer-card">
             <p>⏱️ Your Study Time</p>
 
@@ -291,7 +252,6 @@ function App() {
             </div>
           </div>
 
-          {/* ROOM TIMER DATA */}
           {roomTimer && (
             <div className="timer-card">
               <p>👥 Room Study Session</p>
@@ -302,7 +262,6 @@ function App() {
             </div>
           )}
 
-          {/* STUDENTS CARD */}
           <div className="students-card">
             <h2>👥 Students Studying</h2>
 
@@ -344,7 +303,6 @@ function App() {
             </div>
           </div>
 
-          {/* LEAVE ROOM */}
           <button
             onClick={leaveRoom}
             className="leave-button"
@@ -356,9 +314,6 @@ function App() {
     );
   }
 
-  // =========================
-  // HOME PAGE
-  // =========================
   return (
     <div className="app">
       <div className="home">
